@@ -1,0 +1,27 @@
+{
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "@app/common/(.*)": "<rootDir>/../libs/common/src/$1",
+    "@app/common": "<rootDir>/../libs/common/src",
+    "@app/core/(.*)": "<rootDir>/../libs/core/src/$1",
+    "@app/core": "<rootDir>/../libs/core/src",
+    "@app/journal/(.*)": "<rootDir>/../libs/journal/src/$1",
+    "@app/journal": "<rootDir>/../libs/journal/src",
+    "@app/notification/(.*)": "<rootDir>/../libs/notification/src/$1",
+    "@app/notification": "<rootDir>/../libs/notification/src",
+    "@app/user-access-control/(.*)": "<rootDir>/../libs/user-access-control/src/$1",
+    "@app/user-access-control": "<rootDir>/../libs/user-access-control/src",
+    "@app/events/(.*)": "<rootDir>/../libs/events/src/$1",
+    "@app/events": "<rootDir>/../libs/events/src"
+  }
+}
