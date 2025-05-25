@@ -1,21 +1,24 @@
-// response-validation.interceptor.ts
 import {
-  Injectable,
-  NestInterceptor,
-  ExecutionContext,
   CallHandler,
+  ExecutionContext,
+  Injectable,
   InternalServerErrorException,
+  NestInterceptor,
 } from '@nestjs/common';
+import {
+  ValidationError,
+  getMetadataStorage,
+  validateSync,
+} from 'class-validator';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ValidationError, validateSync } from 'class-validator';
 
 @Injectable()
 export class ResponseValidationInterceptor implements NestInterceptor {
   intercept(_: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((data) => {
-        if (data instanceof Object) {
+        if (this.shouldValidate(data)) {
           const errors = validateSync(data);
           if (errors.length > 0) {
             const messages = this.extractErrorMessages(errors);
@@ -30,17 +33,30 @@ export class ResponseValidationInterceptor implements NestInterceptor {
     );
   }
 
-  // TODO: [IMPORTANT] find a way to avoid recursion here
+  private shouldValidate(data: any): boolean {
+    if (!(data instanceof Object)) return false;
+
+    const metadataStorage = getMetadataStorage();
+    const metadatas = metadataStorage.getTargetValidationMetadatas(
+      data.constructor,
+      '',
+      false,
+      false,
+    );
+    return metadatas.length > 0;
+  }
+
   private extractErrorMessages(
     errors: ValidationError[],
     messages: string[] = [],
   ): string[] {
     for (const error of errors) {
-      if (error) {
-        if (error.children && error.children.length > 0)
-          this.extractErrorMessages(error.children, messages);
-        const constraints = error.constraints;
-        if (constraints) messages.push(Object.values(constraints).join(', '));
+      if (error.children && error.children.length > 0) {
+        this.extractErrorMessages(error.children, messages);
+      }
+      const constraints = error.constraints;
+      if (constraints) {
+        messages.push(...Object.values(constraints));
       }
     }
     return messages;
