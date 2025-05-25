@@ -22,6 +22,8 @@
     "@app/user-access-control/(.*)": "<rootDir>/../libs/user-access-control/src/$1",
     "@app/user-access-control": "<rootDir>/../libs/user-access-control/src",
     "@app/events/(.*)": "<rootDir>/../libs/events/src/$1",
-    "@app/events": "<rootDir>/../libs/events/src"
+    "@app/events": "<rootDir>/../libs/events/src",
+    "@app/file-storage/(.*)": "<rootDir>/../libs/file-storage/src/$1",
+    "@app/file-storage": "<rootDir>/../libs/file-storage/src"
   }
 }

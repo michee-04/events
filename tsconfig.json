@@ -18,42 +18,20 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/common": [
-        "libs/common/src"
-      ],
-      "@app/common/*": [
-        "libs/common/src/*"
-      ],
-      "@app/core": [
-        "libs/core/src"
-      ],
-      "@app/core/*": [
-        "libs/core/src/*"
-      ],
-      "@app/journal": [
-        "libs/journal/src"
-      ],
-      "@app/journal/*": [
-        "libs/journal/src/*"
-      ],
-      "@app/notification": [
-        "libs/notification/src"
-      ],
-      "@app/notification/*": [
-        "libs/notification/src/*"
-      ],
-      "@app/user-access-control": [
-        "libs/user-access-control/src"
-      ],
-      "@app/user-access-control/*": [
-        "libs/user-access-control/src/*"
-      ],
-      "@app/events": [
-        "libs/events/src"
-      ],
-      "@app/events/*": [
-        "libs/events/src/*"
-      ]
+      "@app/common": ["libs/common/src"],
+      "@app/common/*": ["libs/common/src/*"],
+      "@app/core": ["libs/core/src"],
+      "@app/core/*": ["libs/core/src/*"],
+      "@app/journal": ["libs/journal/src"],
+      "@app/journal/*": ["libs/journal/src/*"],
+      "@app/notification": ["libs/notification/src"],
+      "@app/notification/*": ["libs/notification/src/*"],
+      "@app/user-access-control": ["libs/user-access-control/src"],
+      "@app/user-access-control/*": ["libs/user-access-control/src/*"],
+      "@app/events": ["libs/events/src"],
+      "@app/events/*": ["libs/events/src/*"],
+      "@app/file-storage": ["libs/file-storage/src"],
+      "@app/file-storage/*": ["libs/file-storage/src/*"]
     }
   }
 }
