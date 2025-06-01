@@ -7,6 +7,7 @@ import { ApiCoreModule } from './modules/core/core.module';
 import { ApiEventModule } from './modules/event/evenement.module';
 import { ApiJournalModule } from './modules/journal/journal.module';
 import { ApiNotificationModule } from './modules/notification/notification.module';
+import { ApiProgramModule } from './modules/programme/programme.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ApiNotificationModule } from './modules/notification/notification.modul
     ApiJournalModule,
     ApiNotificationModule,
     ApiEventModule,
+    ApiProgramModule,
   ],
   controllers: [],
   providers: [],

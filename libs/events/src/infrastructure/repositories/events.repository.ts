@@ -16,6 +16,6 @@ export class EventsRepository extends BaseRepository<Events> {
   }
 
   async getTitle(title: string) {
-    return this.exists({ title });
+    return this.exists({ title, deleted: false });
   }
 }
