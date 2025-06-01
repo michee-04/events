@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { SearchFilter, StringUtils } from '@app/common/utils';
 import { FilterQuery } from '@app/core/providers/base.mongo.repository';
 import { EventsService } from '@app/events/domain/services/events.service';
@@ -7,24 +6,19 @@ import { EventsRepository } from '@app/events/infrastructure/repositories/events
 import { JournalService } from '@app/journal/domain/services/journal.service';
 import {
   Controller,
-  Delete,
   Get,
   HttpCode,
   HttpStatus,
   LogLevel,
-  Param,
   Post,
-  Put,
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Admin } from 'src/modules/core/decorators';
-import { CreateEventDto } from '../../dto';
-import { UpdateEventDto } from '../../dto/request/update-event.request.dto';
+import { Public } from 'src/modules/core/decorators';
 
-@Admin()
-@Controller('admin/event')
-export class AdminEventController {
+@Public()
+@Controller('user/event')
+export class EventController {
   private readonly searchFilter: SearchFilter;
 
   constructor(
@@ -40,20 +34,6 @@ export class AdminEventController {
       isOnline: 'boolean',
       tags: 'string',
     });
-  }
-
-  @HttpCode(HttpStatus.CREATED)
-  @Post('')
-  async createEvent(@Req() req: Request) {
-    try {
-      const input = new CreateEventDto(req.body);
-
-      const result = await this.eventService.createEvent({ ...input });
-
-      return result;
-    } catch (error) {
-      throw error;
-    }
   }
 
   @HttpCode(HttpStatus.OK)
@@ -104,33 +84,6 @@ export class AdminEventController {
       const events = await this.eventService.get(filter, limit, skip, sort);
 
       return events;
-    } catch (error) {
-      this.log('error', '', error);
-      throw error;
-    }
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Put('/:id')
-  async updateEvent(@Param('id') id: string, @Req() req: Request) {
-    try {
-      const input = new UpdateEventDto(req.body);
-
-      const result = await this.eventService.updateEvent(id, { ...input });
-
-      return result;
-    } catch (error) {
-      this.log('error', '', error);
-      throw error;
-    }
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Delete('/:id')
-  async deleteEevnt(@Param('id') id: string) {
-    try {
-      await this.eventService.deleteEvent(id);
-      return null;
     } catch (error) {
       this.log('error', '', error);
       throw error;

@@ -24,6 +24,8 @@
     "@app/events/(.*)": "<rootDir>/../libs/events/src/$1",
     "@app/events": "<rootDir>/../libs/events/src",
     "@app/file-storage/(.*)": "<rootDir>/../libs/file-storage/src/$1",
-    "@app/file-storage": "<rootDir>/../libs/file-storage/src"
+    "@app/file-storage": "<rootDir>/../libs/file-storage/src",
+    "@app/program/(.*)": "<rootDir>/../libs/program/src/$1",
+    "@app/program": "<rootDir>/../libs/program/src"
   }
 }

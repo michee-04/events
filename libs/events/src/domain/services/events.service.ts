@@ -12,10 +12,10 @@ import { Injectable, Logger } from '@nestjs/common';
 export class EventsService {
   private readonly logger = new Logger(EventsService.name);
 
-  constructor(private readonly EventsRepository: EventsRepository) {}
+  constructor(private readonly eventsRepository: EventsRepository) {}
 
   getAll() {
-    return this.EventsRepository.getAll({
+    return this.eventsRepository.getAll({
       deleted: false,
     });
   }
@@ -32,11 +32,11 @@ export class EventsService {
       // isAdmin,
       deleted: false,
     };
-    return this.EventsRepository.get(filter, limit, skip, sort);
+    return this.eventsRepository.get(filter, limit, skip, sort);
   }
 
   async createEvent(input: Partial<Events>) {
-    const existingEvent = await this.EventsRepository.getTitle(input.title);
+    const existingEvent = await this.eventsRepository.getTitle(input.title);
 
     if (existingEvent) {
       throw new ErrorResult({
@@ -58,13 +58,13 @@ export class EventsService {
     eventDto.startDate = input.startDate;
     eventDto.endDate = input.endDate;
 
-    const event = await this.EventsRepository.create(eventDto);
+    const event = await this.eventsRepository.create(eventDto);
 
     return event;
   }
 
   async updateEvent(id: string, input: Partial<Events>) {
-    let event = await this.EventsRepository.getById(id);
+    let event = await this.eventsRepository.getById(id);
     if (!event) {
       throw new ErrorResult({
         code: 400_016,
@@ -83,7 +83,7 @@ export class EventsService {
     event.startDate = input.startDate || event.startDate;
     event.endDate = input.endDate || event.endDate;
 
-    event = await this.EventsRepository.update(event);
+    event = await this.eventsRepository.update(event);
     if (!event) {
       throw new ErrorResult({
         code: 404_016,
@@ -96,11 +96,11 @@ export class EventsService {
   }
 
   async deleteEvent(id: string) {
-    const event = await this.EventsRepository.getById(id);
+    const event = await this.eventsRepository.getById(id);
 
     event.deleted = true;
     event.deletedAt = new Date();
 
-    return this.EventsRepository.update(event);
+    return this.eventsRepository.update(event);
   }
 }
