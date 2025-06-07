@@ -10,10 +10,12 @@ import {
   HttpCode,
   HttpStatus,
   LogLevel,
+  Param,
   Post,
   Req,
+  Res,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { Public } from 'src/modules/core/decorators';
 
 @Public()
@@ -84,6 +86,24 @@ export class EventController {
       const events = await this.eventService.get(filter, limit, skip, sort);
 
       return events;
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get(':id/download')
+  async getFIle(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const result = await this.eventService.downloadFile(id);
+
+      res.set({
+        'Content-Type': result.mimetype,
+        'Content-Disposition': `attachment; filename="${encodeURIComponent(result.originalName)}"`,
+      });
+
+      return result.stream.pipe(res);
     } catch (error) {
       this.log('error', '', error);
       throw error;

@@ -40,14 +40,22 @@ export class Events extends Document {
   @Prop({ type: Boolean, default: false })
   isOnline: boolean;
 
+  @ApiProperty({
+    type: Boolean,
+    example: false,
+    description: 'true si l’événement est payant, false si gratuit',
+  })
+  @Prop({ type: Boolean, required: true, default: false })
+  isPaid: boolean;
+
   @ApiProperty({ type: Array<any>, example: ['#tdev'] })
   @Prop({ type: Array<any>, required: true })
   tags: Array<any>;
 
   // TODO: A remettre dans le model après avoir implementer le fileService
-  // @ApiProperty({ type: String, example: 'http://localhost' })
-  // @Prop({ type: String, required: false })
-  // imageUrl: string;
+  @ApiProperty({ type: String, example: 'http://localhost' })
+  @Prop({ type: String, required: false })
+  imageUrl: string;
 
   @ApiProperty({
     type: Date,

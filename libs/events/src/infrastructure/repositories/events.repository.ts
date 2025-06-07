@@ -18,4 +18,8 @@ export class EventsRepository extends BaseRepository<Events> {
   async getTitle(title: string) {
     return this.exists({ title, deleted: false });
   }
+
+  async getFileUrl(fileId: string) {
+    return this.get({ fileId, deleted: false });
+  }
 }

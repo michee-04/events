@@ -41,7 +41,7 @@ export class AppConfig {
   @Max(65_535)
   @IsOptional()
   @Transform(({ value }) => parseInt(value, 10))
-  API_APP_PORT: number = 9000;
+  API_APP_PORT: number = 6000;
 
   @IsUrl({ require_protocol: true, require_tld: false })
   API_APP_BASE_URL: string;
@@ -314,6 +314,76 @@ export class AppConfig {
   @ValidateIf((o) => o.LIB_NOTIFICATION_MAILER_GMAIL_ENABLED === true)
   @IsEmail()
   LIB_NOTIFICATION_MAILER_GMAIL_DEFAULT_MAIL_FROM: string;
+
+  // ------------- File Storage
+  // Storage
+  @IsString()
+  @IsNotEmpty()
+  LIB_FILESTORAGE_BUCKETS_WHITELIST: string;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  @Transform(({ value }) => parseInt(value, 10))
+  LIB_FILESTORAGE_FILE_UPLOAD_MAX_SIZE_MB: number = 10;
+
+  @IsString()
+  @IsNotEmpty()
+  LIB_FILESTORAGE_FILE_UPLOAD_ALLOWED_TYPES: string;
+
+  // Minio
+  @IsString()
+  @IsNotEmpty()
+  LIB_MINIO_HOST: string;
+
+  @IsString()
+  @IsNotEmpty()
+  LIB_MINIO_ACCESS_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  LIB_MINIO_SECRET_KEY: string;
+
+  @IsInt()
+  @Min(0)
+  @Max(65_535)
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  LIB_MINIO_API_PORT: number = 9000;
+
+  @IsString()
+  @IsNotEmpty()
+  LIB_MINIO_BUCKET_NAME: string;
+
+  @IsString()
+  @IsNotEmpty()
+  LIB_MINIO_REGION: string;
+
+  @IsInt()
+  @Min(0)
+  @Max(65_535)
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  LIB_MINIO_CONSOLE_PORT: number = 9000;
+
+  @IsInt()
+  @Min(0)
+  @Max(65_535)
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  LIB_MINIO_EXT_API_PORT: number = 9000;
+
+  @IsInt()
+  @Min(0)
+  @Max(65_535)
+  @IsNotEmpty()
+  @Transform(({ value }) => parseInt(value, 10))
+  LIB_MINIO_EXT_CONSOLE_PORT: number = 9000;
+
+  @IsBoolean()
+  @IsOptional()
+  @Transform(({ value }) => value === 'true')
+  LIB_MINIO_USE_SSL: boolean = false;
 }
 
 export function validateConfig(payload: Record<string, any>) {

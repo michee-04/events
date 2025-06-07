@@ -13,6 +13,12 @@ declare global {
         type: string;
         countryCode: string;
       };
+      uploadedFile?: Express.Multer.File & {
+        extension: string;
+        timestamp: number;
+        bucket: string;
+        hash: string;
+      };
     }
   }
 }

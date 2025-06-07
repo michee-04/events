@@ -16,9 +16,13 @@ import {
   Post,
   Put,
   Req,
+  Res,
+  StreamableFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { Admin } from 'src/modules/core/decorators';
+import { FileUploadInterceptor } from 'src/modules/core/interceptors/file-upload.interceptor';
 import { CreateEventDto } from '../../dto';
 import { UpdateEventDto } from '../../dto/request/update-event.request.dto';
 
@@ -44,11 +48,16 @@ export class AdminEventController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('')
+  @UseInterceptors(FileUploadInterceptor)
   async createEvent(@Req() req: Request) {
     try {
-      const input = new CreateEventDto(req.body);
+      const { body, uploadedFile } = req;
+      const input = new CreateEventDto(body);
 
-      const result = await this.eventService.createEvent({ ...input });
+      const result = await this.eventService.createEvent(
+        { ...input },
+        uploadedFile!,
+      );
 
       return result;
     } catch (error) {
@@ -62,7 +71,6 @@ export class AdminEventController {
     try {
       const { limit, skip, query } = req.filterQuery;
       const filter: FilterQuery<Events> = {};
-
       if (query) {
         const numQuery = Number(query);
         if (StringUtils.isMongoId(query)) {
@@ -131,6 +139,24 @@ export class AdminEventController {
     try {
       await this.eventService.deleteEvent(id);
       return null;
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get(':id/download')
+  async getFIle(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const result = await this.eventService.downloadFile(id);
+
+      res.set({
+        'Content-Type': result.mimetype,
+        'Content-Disposition': `attachment; filename="${encodeURIComponent(result.originalName)}"`,
+      });
+
+      return result.stream.pipe(res);
     } catch (error) {
       this.log('error', '', error);
       throw error;

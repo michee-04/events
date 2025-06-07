@@ -20,6 +20,9 @@ export class CreateEventDto {
   @ApiProperty({ type: Boolean, example: false, default: false })
   isOnline: boolean;
 
+  @ApiProperty({ type: Boolean, example: false, default: false })
+  isPaid: boolean;
+
   @ApiProperty({ type: [String], example: ['#tdev'] })
   tags: string[];
 
@@ -33,6 +36,10 @@ export class CreateEventDto {
   endDate: Date;
 
   constructor(input: Record<string, any>) {
+    if (input.capacity !== undefined) {
+      input.capacity = Number(input.capacity);
+    }
+
     this.validate(input);
 
     this.title = input.title;
@@ -40,8 +47,8 @@ export class CreateEventDto {
     this.location = input.location;
     this.capacity = input.capacity;
     this.isOnline = input.isOnline ?? false;
+    this.isPaid = input.isPaid ?? false;
     this.tags = input.tags;
-    // this.imageUrl = input.imageUrl;
     this.startDate = new Date(input.startDate);
     this.endDate = new Date(input.endDate);
   }
