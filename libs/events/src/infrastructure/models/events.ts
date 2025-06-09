@@ -48,6 +48,15 @@ export class Events extends Document {
   @Prop({ type: Boolean, required: true, default: false })
   isPaid: boolean;
 
+  @ApiProperty({
+    type: Number,
+    example: 5000,
+    description: "Prix de l'événement (obligatoire si isPaid=true)",
+    nullable: true,
+  })
+  @Prop({ type: Number, required: false, default: null })
+  price: number | null;
+
   @ApiProperty({ type: Array<any>, example: ['#tdev'] })
   @Prop({ type: Array<any>, required: true })
   tags: Array<any>;

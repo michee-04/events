@@ -14,9 +14,7 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Public } from 'src/modules/core/decorators';
 
-@Public()
 @Controller('user/programme')
 export class ProgrammeController {
   private readonly searchFilter: SearchFilter;

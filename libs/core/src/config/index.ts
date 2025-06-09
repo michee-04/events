@@ -384,6 +384,12 @@ export class AppConfig {
   @IsOptional()
   @Transform(({ value }) => value === 'true')
   LIB_MINIO_USE_SSL: boolean = false;
+
+  // ------------- Pdf Doc
+  // Storage
+  @IsString()
+  @IsNotEmpty()
+  PDF_AUTHOR: string;
 }
 
 export function validateConfig(payload: Record<string, any>) {

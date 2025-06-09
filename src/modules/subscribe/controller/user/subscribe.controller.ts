@@ -17,15 +17,16 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Public } from 'src/modules/core/decorators';
 
+@Public()
 @Controller('user/event')
-export class EventController {
+export class SubscribeController {
   private readonly searchFilter: SearchFilter;
 
   constructor(
     private readonly eventService: EventsService,
     private readonly subscribeService: SubscribeService,
-
     private readonly eventsRepository: EventsRepository,
     private readonly journalService: JournalService,
   ) {
@@ -105,21 +106,6 @@ export class EventController {
       });
 
       return result.stream.pipe(res);
-    } catch (error) {
-      this.log('error', '', error);
-      throw error;
-    }
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Post(':id/subscribe')
-  async subscribe(@Req() req: Request, @Param('id') id: string) {
-    try {
-      const user = req.user;
-
-      const result = await this.subscribeService.subscribe(user, id);
-
-      return result;
     } catch (error) {
       this.log('error', '', error);
       throw error;

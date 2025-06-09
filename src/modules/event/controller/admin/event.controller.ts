@@ -5,6 +5,7 @@ import { EventsService } from '@app/events/domain/services/events.service';
 import { Events } from '@app/events/infrastructure/models/events';
 import { EventsRepository } from '@app/events/infrastructure/repositories/events.repository';
 import { JournalService } from '@app/journal/domain/services/journal.service';
+import { SubscribeService } from '@app/subscribe/domain/services/subscribe.service';
 import {
   Controller,
   Delete,
@@ -33,6 +34,7 @@ export class AdminEventController {
 
   constructor(
     private readonly eventService: EventsService,
+    private readonly subscribeService: SubscribeService,
     private readonly eventsRepository: EventsRepository,
     private readonly journalService: JournalService,
   ) {
@@ -157,6 +159,22 @@ export class AdminEventController {
       });
 
       return result.stream.pipe(res);
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  // TODO: A ramener dans le service  controller
+  @HttpCode(HttpStatus.OK)
+  @Post(':id/subscribe')
+  async subscribe(@Req() req: Request, @Param('id') id: string) {
+    try {
+      const user = req.user;
+
+      const result = await this.subscribeService.subscribe(user, id);
+
+      return result;
     } catch (error) {
       this.log('error', '', error);
       throw error;

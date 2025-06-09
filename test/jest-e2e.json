@@ -26,6 +26,8 @@
     "@app/file-storage/(.*)": "<rootDir>/../libs/file-storage/src/$1",
     "@app/file-storage": "<rootDir>/../libs/file-storage/src",
     "@app/program/(.*)": "<rootDir>/../libs/program/src/$1",
-    "@app/program": "<rootDir>/../libs/program/src"
+    "@app/program": "<rootDir>/../libs/program/src",
+    "@app/subscribe/(.*)": "<rootDir>/../libs/subscribe/src/$1",
+    "@app/subscribe": "<rootDir>/../libs/subscribe/src"
   }
 }

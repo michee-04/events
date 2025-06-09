@@ -1,31 +1,38 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { SearchFilter, StringUtils } from '@app/common/utils';
 import { FilterQuery } from '@app/core/providers/base.mongo.repository';
 import { EventsService } from '@app/events/domain/services/events.service';
 import { Events } from '@app/events/infrastructure/models/events';
 import { EventsRepository } from '@app/events/infrastructure/repositories/events.repository';
 import { JournalService } from '@app/journal/domain/services/journal.service';
-import { SubscribeService } from '@app/subscribe/domain/services/subscribe.service';
 import {
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
   LogLevel,
   Param,
   Post,
+  Put,
   Req,
   Res,
+  StreamableFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Admin } from 'src/modules/core/decorators';
+import { FileUploadInterceptor } from 'src/modules/core/interceptors/file-upload.interceptor';
+import { CreateEventDto } from '../../dto';
+import { UpdateEventDto } from '../../dto/request/update-event.request.dto';
 
-@Controller('user/event')
-export class EventController {
+@Admin()
+@Controller('admin/event')
+export class AdminEventController {
   private readonly searchFilter: SearchFilter;
 
   constructor(
     private readonly eventService: EventsService,
-    private readonly subscribeService: SubscribeService,
-
     private readonly eventsRepository: EventsRepository,
     private readonly journalService: JournalService,
   ) {
@@ -39,13 +46,31 @@ export class EventController {
     });
   }
 
+  @HttpCode(HttpStatus.CREATED)
+  @Post('')
+  @UseInterceptors(FileUploadInterceptor)
+  async createEvent(@Req() req: Request) {
+    try {
+      const { body, uploadedFile } = req;
+      const input = new CreateEventDto(body);
+
+      const result = await this.eventService.createEvent(
+        { ...input },
+        uploadedFile!,
+      );
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @HttpCode(HttpStatus.OK)
   @Get()
   async list(@Req() req: Request) {
     try {
       const { limit, skip, query } = req.filterQuery;
       const filter: FilterQuery<Events> = {};
-
       if (query) {
         const numQuery = Number(query);
         if (StringUtils.isMongoId(query)) {
@@ -94,6 +119,33 @@ export class EventController {
   }
 
   @HttpCode(HttpStatus.OK)
+  @Put('/:id')
+  async updateEvent(@Param('id') id: string, @Req() req: Request) {
+    try {
+      const input = new UpdateEventDto(req.body);
+
+      const result = await this.eventService.updateEvent(id, { ...input });
+
+      return result;
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Delete('/:id')
+  async deleteEevnt(@Param('id') id: string) {
+    try {
+      await this.eventService.deleteEvent(id);
+      return null;
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Get(':id/download')
   async getFIle(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -105,21 +157,6 @@ export class EventController {
       });
 
       return result.stream.pipe(res);
-    } catch (error) {
-      this.log('error', '', error);
-      throw error;
-    }
-  }
-
-  @HttpCode(HttpStatus.OK)
-  @Post(':id/subscribe')
-  async subscribe(@Req() req: Request, @Param('id') id: string) {
-    try {
-      const user = req.user;
-
-      const result = await this.subscribeService.subscribe(user, id);
-
-      return result;
     } catch (error) {
       this.log('error', '', error);
       throw error;

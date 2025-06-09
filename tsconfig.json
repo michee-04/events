@@ -65,6 +65,12 @@
       ],
       "@app/program/*": [
         "libs/program/src/*"
+      ],
+      "@app/subscribe": [
+        "libs/subscribe/src"
+      ],
+      "@app/subscribe/*": [
+        "libs/subscribe/src/*"
       ]
     }
   }

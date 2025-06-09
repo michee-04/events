@@ -58,8 +58,9 @@ export class EventsService {
     eventDto.location = input.location;
     eventDto.capacity = input.capacity;
     eventDto.isOnline = input.isOnline;
-    eventDto.tags = input.tags;
     eventDto.isPaid = input.isPaid;
+    eventDto.price = input.isPaid ? input.price : null;
+    eventDto.tags = input.tags;
     // TODO: A corriger après avoir implementer le fileService
     // eventDto.imageUrl = input.imageUrl;
     eventDto.startDate = input.startDate;
@@ -114,10 +115,10 @@ export class EventsService {
     event.description = input.description || event.description;
     event.location = input.location || event.location;
     event.capacity = input.capacity || event.capacity;
-    event.isOnline = input.isOnline || event.isOnline;
-    event.isPaid = input.isPaid || event.isPaid;
+    event.isOnline = input.isOnline ?? event.isOnline;
+    event.isPaid = input.isPaid ?? event.isPaid;
+    event.price = event.isPaid ? (input.price ?? event.price) : null;
     event.tags = input.tags || event.tags;
-    // event.imageUrl = input.imageUrl || event.imageUrl;
     event.startDate = input.startDate || event.startDate;
     event.endDate = input.endDate || event.endDate;
 
