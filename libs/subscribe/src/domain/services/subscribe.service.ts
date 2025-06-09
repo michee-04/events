@@ -91,10 +91,10 @@ export class SubscribeService {
 
     const lang: string | null = 'fr';
 
-    const payload = { lang, isFr: lang === 'fr' };
+    const payload = { lang, isFr: lang === 'fr', eventName: event.title };
     Promise.all([
       this.notifyService.notifyByEmail(
-        'mail-email-change-confirmation',
+        'mail-confirmation-evenement',
         payload,
         user.email,
         user._id.toString(),
@@ -225,12 +225,16 @@ export class SubscribeService {
     ];
 
     const lang: string | null = 'fr';
-    const payload = { lang, isFr: lang === 'fr' };
+    const payload = {
+      lang,
+      isFr: lang === 'fr',
+      eventName: event.title,
+    };
 
     // Envoi de l'e-mail
     this.notifyService
       .notifyByEmail(
-        'mail-email-change-confirmation', // Votre template d'e-mail
+        'mail-confirmation-evenement', // Votre template d'e-mail
         payload,
         user.email,
         user._id.toString(),

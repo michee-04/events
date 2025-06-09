@@ -95,6 +95,7 @@ export class ProgrammeService {
       programme.eventId as unknown as string,
       programme.startDate as Date,
       programme.endDate as Date,
+      programme._id as unknown as any,
     );
 
     programme = await this.programmeRepository.update(programme);
@@ -150,9 +151,18 @@ export class ProgrammeService {
     eventId: string,
     startDate: Date,
     endDate: Date,
+    currentProgrammeId?: string,
   ) {
-    const programmes =
-      await this.programmeRepository.getEventByProgramme(eventId);
+    let programmes = await this.programmeRepository.getEventByProgramme(
+      eventId,
+      currentProgrammeId,
+    );
+
+    if (currentProgrammeId) {
+      programmes = programmes.filter(
+        (programme) => programme._id.toString() !== currentProgrammeId,
+      );
+    }
 
     const newStart = new Date(startDate).getTime();
     const newEnd = new Date(endDate).getTime();
@@ -170,7 +180,7 @@ export class ProgrammeService {
 
     if (hasOverlap) {
       throw new ErrorResult({
-        code: 400_024,
+        code: 409_024,
         clean_message:
           'Les horaires du programme se chevauchent avec un autre programme existant',
         message:
