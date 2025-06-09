@@ -17,6 +17,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { StripeSessionDto } from '../../dto/request/confirm-payment.request';
 
 @Controller('user/event')
 export class EventController {
@@ -118,6 +119,26 @@ export class EventController {
       const user = req.user;
 
       const result = await this.subscribeService.subscribe(user, id);
+
+      return result;
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('confirm-payment')
+  async ConfirmPayment(@Req() req: Request) {
+    try {
+      const { body, user } = req;
+
+      const payload = new StripeSessionDto(body);
+
+      const result = await this.subscribeService.confirmPaidSubscription(
+        { ...payload },
+        user,
+      );
 
       return result;
     } catch (error) {

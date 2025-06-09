@@ -30,11 +30,18 @@ export class Events extends Document {
   location: string;
 
   @ApiProperty({
-    type: String,
+    type: Number,
     example: 15,
   })
   @Prop({ type: Number, required: true })
   capacity: number;
+
+  @ApiProperty({
+    type: Number,
+    example: 15,
+  })
+  @Prop({ type: Number, required: true, default: 0 })
+  registeredCount: number;
 
   @ApiProperty({ type: Boolean, example: false, default: false })
   @Prop({ type: Boolean, default: false })

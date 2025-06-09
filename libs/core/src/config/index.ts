@@ -390,6 +390,19 @@ export class AppConfig {
   @IsString()
   @IsNotEmpty()
   PDF_AUTHOR: string;
+
+  // ------------- Stripe
+  @IsString()
+  @IsNotEmpty()
+  STRIPE_SECRET_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  STRIPE_PUBLIC_KEY: string;
+
+  @IsString()
+  @IsNotEmpty()
+  STRIPE_FRONT_URL: string;
 }
 
 export function validateConfig(payload: Record<string, any>) {

@@ -25,6 +25,7 @@ import { Request, Response } from 'express';
 import { Admin } from 'src/modules/core/decorators';
 import { FileUploadInterceptor } from 'src/modules/core/interceptors/file-upload.interceptor';
 import { CreateEventDto } from '../../dto';
+import { StripeSessionDto } from '../../dto/request/confirm-payment.request';
 import { UpdateEventDto } from '../../dto/request/update-event.request.dto';
 
 @Admin()
@@ -173,6 +174,26 @@ export class AdminEventController {
       const user = req.user;
 
       const result = await this.subscribeService.subscribe(user, id);
+
+      return result;
+    } catch (error) {
+      this.log('error', '', error);
+      throw error;
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('confirm-payment')
+  async ConfirmPayment(@Req() req: Request) {
+    try {
+      const { body, user } = req;
+
+      const payload = new StripeSessionDto(body);
+
+      const result = await this.subscribeService.confirmPaidSubscription(
+        { ...payload },
+        user,
+      );
 
       return result;
     } catch (error) {

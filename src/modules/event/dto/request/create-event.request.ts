@@ -57,6 +57,14 @@ export class CreateEventDto {
       input.tags = JSON.parse(input.tags);
     }
 
+    if (typeof input.isPaid === 'string') {
+      input.isPaid = input.isPaid === 'true';
+    }
+
+    if (typeof input.isOnline === 'string') {
+      input.isOnline = input.isOnline === 'true';
+    }
+
     this.validate(input);
 
     this.title = input.title;

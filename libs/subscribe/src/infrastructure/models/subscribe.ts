@@ -7,6 +7,7 @@ export enum SubscribeStatus {
   PENDING_PAYMENT = 'pending_payment',
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
+  FREE = 'free',
   REFUNDED = 'refunded',
 }
 
