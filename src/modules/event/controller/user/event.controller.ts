@@ -17,8 +17,10 @@ import {
   Res,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Public } from 'src/modules/core/decorators';
 import { StripeSessionDto } from '../../dto/request/confirm-payment.request';
 
+@Public()
 @Controller('user/event')
 export class EventController {
   private readonly searchFilter: SearchFilter;
